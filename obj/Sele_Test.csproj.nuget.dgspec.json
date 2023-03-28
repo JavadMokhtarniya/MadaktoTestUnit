@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\7\\source\\repos\\Sele_Test\\Sele_Test.csproj": {}
+    "D:\\Raeisy\\Github\\MadaktoTestUnit\\Sele_Test.csproj": {}
   },
   "projects": {
-    "C:\\Users\\7\\source\\repos\\Sele_Test\\Sele_Test.csproj": {
+    "D:\\Raeisy\\Github\\MadaktoTestUnit\\Sele_Test.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\7\\source\\repos\\Sele_Test\\Sele_Test.csproj",
+        "projectUniqueName": "D:\\Raeisy\\Github\\MadaktoTestUnit\\Sele_Test.csproj",
         "projectName": "Sele_Test",
-        "projectPath": "C:\\Users\\7\\source\\repos\\Sele_Test\\Sele_Test.csproj",
+        "projectPath": "D:\\Raeisy\\Github\\MadaktoTestUnit\\Sele_Test.csproj",
         "packagesPath": "C:\\Users\\7\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\7\\source\\repos\\Sele_Test\\obj\\",
+        "outputPath": "D:\\Raeisy\\Github\\MadaktoTestUnit\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

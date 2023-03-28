@@ -15,6 +15,7 @@ using OpenQA.Selenium.Support.UI;
 using Newtonsoft.Json;
 using System.Xml.Linq;
 using System.Threading;
+using AventStack.ExtentReports.MarkupUtils;
 
 namespace Sele_Test
 {
@@ -43,7 +44,7 @@ namespace Sele_Test
         {
 
             extent = new ExtentReports();
-            var htmlreporter = new ExtentHtmlReporter(@"D:\ReportResults\Report" + DateTime.Now.ToString("_MMddyyyy_hhmmtt") + ".html");
+            var htmlreporter = new ExtentHtmlReporter(@"D:\Report_Device\" + DateTime.Now.ToString("_MMddyyyy_hhmmtt") + "\\Rep.html", AventStack.ExtentReports.Reporter.Configuration.ViewStyle.SPA);
             extent.AttachReporter(htmlreporter);
 
         }
@@ -179,7 +180,7 @@ namespace Sele_Test
             url = "http://192.168.0.151/madaktosite/Attendance/Devices/24";
             Openbrowser();
             Login();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Thread.Sleep(4000);
                 Definition_Device(i);
@@ -187,8 +188,8 @@ namespace Sele_Test
         }
         public async void Definition_Device(int i)
         {
-
             test = extent.CreateTest("Definition_Device" + i).Info("Definition_Device" + i);
+            //test = test.CreateNode(new GherkinKeyword("1234"), "test1234");
             // test = extent.CreateTest("Definition_Device").Info("Definition_Device");            
             //test.Log(Status.Info, "login SuccessFully");            
             WB.Navigate().GoToUrl(url);
@@ -251,7 +252,7 @@ namespace Sele_Test
 
             catch (Exception e)
 
-            {
+            {               
                 test.Log(Status.Fail, "Test Fail : " + "عملیات تست نافص شده");
                 throw;
 
@@ -301,7 +302,7 @@ namespace Sele_Test
             Console.WriteLine("Closing Browser ...");
         }
     }
-    public class TestResult
+    public class TestResult : AventStack.ExtentReports.Gherkin.Model.IGherkinFormatterModel
     {
         public string MessageType { get; set; }
         public string Message { get; set; }

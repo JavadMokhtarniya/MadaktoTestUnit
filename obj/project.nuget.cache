@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iA2Vt0uD6C0g9boLNIHUhKmNd8GvfZ+YV4KpEuWiCuvMRMaJZd46zI1gRTzLBWRzx0GQOKE9iPsX8VK9pFshQg==",
+  "dgSpecHash": "or6L4MqwAKJ7iNFoHXY4lErOzOujgTu/EuVnKJV95AjQglFcvrrFdVqqNdtMhxUEhjZPt92sIR1tioHeYZMEfg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\7\\source\\repos\\Sele_Test\\Sele_Test.csproj",
+  "projectFilePath": "D:\\Raeisy\\Github\\MadaktoTestUnit\\Sele_Test.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\7\\.nuget\\packages\\anglesharp\\0.17.1\\anglesharp.0.17.1.nupkg.sha512",
     "C:\\Users\\7\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",
