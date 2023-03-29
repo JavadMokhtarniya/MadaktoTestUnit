@@ -17,6 +17,9 @@ using System.Xml.Linq;
 using System.Threading;
 using AventStack.ExtentReports.MarkupUtils;
 using OpenQA.Selenium.DevTools;
+using System.Collections.ObjectModel;
+using NUnit.Framework.Internal;
+using OpenQA.Selenium.DevTools.V109.Debugger;
 
 namespace Sele_Test
 {
@@ -181,10 +184,12 @@ namespace Sele_Test
             url = "http://192.168.0.151/madaktosite/Basic/FinancialYear/24";
             Openbrowser();
             Login();
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 Thread.Sleep(4000);
-                Definition_FinancialYear(i, false);
+                test = extent.CreateTest("Definition_FinancialYear_CalculateYearFunctional").Info("Definition_FinancialYear_CalculateYearFunctional");
+                WB.Manage().Window.Maximize();
+                Definition_FinancialYear_CalculateYearFunctional();
             }
         }
         [Test]
@@ -197,8 +202,8 @@ namespace Sele_Test
             url = "http://192.168.0.151/madaktosite/Basic/FinancialYear/24";
             Openbrowser();
             Login();
-            
-                Definition_FinancialYear_Delete();            
+
+            Definition_FinancialYear_Delete();
         }
         public async void Definition_Device(int i)
         {
@@ -310,11 +315,6 @@ namespace Sele_Test
 
         }
 
-        [TearDown]
-        public void Closebrowser()
-        {
-            Console.WriteLine("Closing Browser ...");
-        }
         public async void Definition_FinancialYear(int i, bool addOrUpdate)
         {
             test = extent.CreateTest("Definition_FinancialYear" + i).Info("Definition_FinancialYear" + i);
@@ -363,7 +363,7 @@ namespace Sele_Test
                     return;
                 }
                 var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<TestResult> tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
+                List<TestResult>? tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -413,7 +413,7 @@ namespace Sele_Test
                     return;
                 }
                 var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<TestResult> tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
+                List<TestResult>? tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -434,6 +434,94 @@ namespace Sele_Test
             javaScript.ExecuteScript("$('#MadaktoUnitTestMessage').html('')");
             //btnSaveDevice.Click();
             test.Extent.Flush();
+        }
+        List<TestResult> getOperationStatus()
+        {
+            IWebElement operationStatus = WB.FindElement(By.Id("MadaktoUnitTestMessage"));
+            string jsonResult = operationStatus.Text;
+            if (string.IsNullOrEmpty(jsonResult))
+            {
+                test.Log(Status.Fail, "Test UnComplete : " + "عملیات تست نافص شده فیلد ها پر نشده است");
+                return new List<TestResult>();
+            }
+            var tmp2 = JsonConvert.DeserializeObject(jsonResult);
+            return JsonConvert.DeserializeObject<List<TestResult>>(jsonResult) ?? new List<TestResult>();
+        }
+        public void Definition_FinancialYear_CalculateYearFunctional()
+        {
+            
+            WB.Navigate().GoToUrl(url);
+            Thread.Sleep(2000);
+            IWebElement? BtnNew = null;
+            BtnNew = WB.FindElements(By.CssSelector("td i.fa-calculator")).FirstOrDefault();
+            BtnNew.Click();
+            Thread.Sleep(1000);
+            IWebElement BtnSelectePersonnelModal = WB.FindElement(By.CssSelector(".floating-image2"));
+            IJavaScriptExecutor javaScript = (IJavaScriptExecutor)WB;
+            javaScript.ExecuteScript("javascript:localEmployeeSrlOrEmployeeId=0; ShowEmployeeListAndSelectPersonelUseFiltering('txtFromEmployeeId');");
+            Thread.Sleep(2000);
+            SearchAndSelect_Personnel();
+            Thread.Sleep(2000);
+
+            while (true)
+            {
+                javaScript.ExecuteScript("javascript:localEmployeeSrlOrEmployeeId=0; ShowEmployeeListAndSelectPersonelUseFiltering('txtToEmployeeId');");
+                Thread.Sleep(2000);
+                SearchAndSelect_Personnel();
+                Thread.Sleep(2000);
+                IWebElement saveFinancialYearClose = WB.FindElement(By.Id("saveFinancialYearClose"));
+                saveFinancialYearClose.Click();
+                Thread.Sleep(2000);
+                var operationsStatus = getOperationStatus();
+                javaScript.ExecuteScript("$('#MadaktoUnitTestMessage').html('')");
+                if (operationsStatus.Count > 0)
+                {
+                    if (operationsStatus[operationsStatus.Count - 1].MessageType == "Error" && operationsStatus[operationsStatus.Count - 1].Message.Contains("تا پرسنل"))
+                    {
+                        continue;
+                    }
+                    else
+                        break;
+                }
+                else
+                    break;
+            }
+
+        }
+        string SearchAndSelect_Personnel()
+        {
+
+            IWebElement BtnSearch = null;
+            SelectElement drpOrganization = null;
+            drpOrganization = new SelectElement(WB.FindElement(By.Id("drpOrganizationSearchAndSelectUseFiltering")));
+            ReadOnlyCollection<IWebElement> GridItems = null;
+            BtnSearch = WB.FindElement(By.ClassName("btn-secondary"));
+            string employeeId = string.Empty;
+            try
+            {
+                do
+                {
+                    int index = new Random().Next(1, drpOrganization.Options.Count - 1);
+                    drpOrganization.SelectByIndex(index);
+                    BtnSearch.Click();
+                    GridItems = WB.FindElements(By.CssSelector("#tbEmployeeListAndSelectPersonelUseFiltering tr"));
+                } while (GridItems?.Count == 0);
+                GridItems.FirstOrDefault().FindElements(By.CssSelector("td")).FirstOrDefault().Click();
+                //WB.FindElement(By.CssSelector("#divEmployeeListAndSelectPersonelUseFiltering .close")).Click();
+
+            }
+            catch (Exception e)
+            {
+                test.Log(Status.Fail, "Test Fail : " + "عملیات تست نافص شده");
+                throw;
+            }
+            return employeeId;
+        }
+
+        [TearDown]
+        public void Closebrowser()
+        {
+            Console.WriteLine("Closing Browser ...");
         }
     }
     public class TestResult : AventStack.ExtentReports.Gherkin.Model.IGherkinFormatterModel

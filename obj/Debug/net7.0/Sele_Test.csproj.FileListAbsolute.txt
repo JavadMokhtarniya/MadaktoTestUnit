@@ -346,8 +346,8 @@ C:\Users\7\Desktop\MadaktoTestUnit\obj\Debug\net7.0\refint\Sele_Test.dll
 C:\Users\7\Desktop\MadaktoTestUnit\obj\Debug\net7.0\Sele_Test.pdb
 C:\Users\7\Desktop\MadaktoTestUnit\obj\Debug\net7.0\Sele_Test.genruntimeconfig.cache
 C:\Users\7\Desktop\MadaktoTestUnit\obj\Debug\net7.0\ref\Sele_Test.dll
-D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\testhost.exe
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\testhost.dll
+D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\testhost.exe
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\NUnit3.TestAdapter.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\NUnit3.TestAdapter.pdb
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\nunit.engine.dll
@@ -436,6 +436,7 @@ D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\Newtonsoft.Json.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\NuGet.Frameworks.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\nunit.framework.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\RazorEngine.NetCore.dll
+D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\WebDriver.Support.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\WebDriver.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\SharpCompress.dll
 D:\Raeisy\Github\MadaktoTestUnit\bin\Debug\net7.0\ICSharpCode.SharpZipLib.dll
