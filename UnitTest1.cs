@@ -449,7 +449,7 @@ namespace Sele_Test
         }
         public void Definition_FinancialYear_CalculateYearFunctional()
         {
-            
+
             WB.Navigate().GoToUrl(url);
             Thread.Sleep(2000);
             IWebElement? BtnNew = null;
@@ -474,6 +474,7 @@ namespace Sele_Test
                 Thread.Sleep(2000);
                 var operationsStatus = getOperationStatus();
                 javaScript.ExecuteScript("$('#MadaktoUnitTestMessage').html('')");
+                var btnSave = WB.FindElement(By.Id("saveFinancialYearClose"));
                 if (operationsStatus.Count > 0)
                 {
                     if (operationsStatus[operationsStatus.Count - 1].MessageType == "Error" && operationsStatus[operationsStatus.Count - 1].Message.Contains("تا پرسنل"))
@@ -483,8 +484,21 @@ namespace Sele_Test
                     else
                         break;
                 }
+                else if (btnSave.Text != "بله")
+                {
+                    WebDriverWait w = new WebDriverWait(WB, TimeSpan.FromMinutes(5));
+
+                    w.Until<int>((driver) =>
+                    {                        
+                        if (btnSave.Text == "بله")
+                        {
+                            return 0;
+                        }
+                        return 1;
+                    });
+                }
                 else
-                    break;
+                    Definition_FinancialYear_CalculateYearFunctional();
             }
 
         }
