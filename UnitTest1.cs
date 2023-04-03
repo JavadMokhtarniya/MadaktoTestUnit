@@ -189,6 +189,24 @@ namespace Sele_Test
                 Definition_FinancialYear_CalculateYearFunctional();
             }
         }
+
+
+        [Test]
+        public void TestFlow_AddOrUpdate()
+        {
+            //Login();
+            //Definition_traffic_regulations();
+            //Definition_Building();
+            // url = "http://192.168.0.114/javad/Attendance/Devices/24";
+            url = "http://192.168.0.151/madaktosite/Basic/FinancialYear/24";
+            Openbrowser();
+            Login();
+            for (int i = 0; i < 1; i++)
+            {
+                Definition_FinancialYear(i, true);
+            }
+        }
+
         [Test]
         public void TestFlow_Delete()
         {
@@ -243,15 +261,7 @@ namespace Sele_Test
                 Thread.Sleep(4000);
                 btnSave.Click();
                 Thread.Sleep(3000);
-                IWebElement operationStatus = WB.FindElement(By.Id("MadaktoUnitTestMessage"));
-                string jsonResult = operationStatus.Text;
-                if (string.IsNullOrEmpty(jsonResult))
-                {
-                    test.Log(Status.Fail, "Test UnComplete : " + "عملیات تست نافص شده فیلد ها پر نشده است");
-                    return;
-                }
-                var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<ResponseDTO> tmp = JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult);
+                List<ResponseDTO>? tmp = getOperationStatus();
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -350,15 +360,7 @@ namespace Sele_Test
                 Thread.Sleep(4000);
                 btnSave.Click();
                 Thread.Sleep(3000);
-                IWebElement operationStatus = WB.FindElement(By.Id("MadaktoUnitTestMessage"));
-                string jsonResult = operationStatus.Text;
-                if (string.IsNullOrEmpty(jsonResult))
-                {
-                    test.Log(Status.Fail, "Test UnComplete : " + "عملیات تست نافص شده فیلد ها پر نشده است");
-                    return;
-                }
-                var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<ResponseDTO>? tmp = JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult);
+                List<ResponseDTO>? tmp = getOperationStatus();
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -394,21 +396,13 @@ namespace Sele_Test
             IJavaScriptExecutor javaScript = (IJavaScriptExecutor)WB;
             try
             {
-                Thread.Sleep(3000);
+                ConfirmDialogYes.Click();
+                Thread.Sleep(2000);
                 var DataObj = new { Number = ConfirmDialogText.Text };
                 string dataJsonString = JsonConvert.SerializeObject(DataObj);
-                test.Log(Status.Info, dataJsonString);
-                ConfirmDialogYes.Click();
-                Thread.Sleep(3000);
-                IWebElement operationStatus = WB.FindElement(By.Id("MadaktoUnitTestMessage"));
-                string jsonResult = operationStatus.Text;
-                if (string.IsNullOrEmpty(jsonResult))
-                {
-                    test.Log(Status.Fail, "Test UnComplete : " + "عملیات تست نافص شده فیلد ها پر نشده است");
-                    return;
-                }
-                var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<ResponseDTO>? tmp = JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult);
+                test.Log(Status.Info, dataJsonString);                                
+
+                List<ResponseDTO>? tmp = getOperationStatus();
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -425,15 +419,14 @@ namespace Sele_Test
                 test.Log(Status.Fail, "Test Fail : " + "عملیات تست نافص شده");
                 throw;
 
-            }
-            javaScript.ExecuteScript("$('#MadaktoUnitTestMessage').html('')");
+            }            
             //btnSaveDevice.Click();
             test.Extent.Flush();
         }
         List<ResponseDTO> getOperationStatus()
         {
-            IWebElement operationStatus = WB.FindElement(By.Id("MadaktoUnitTestMessage"));
-            string jsonResult = operationStatus.Text;
+            IJavaScriptExecutor javaScript = (IJavaScriptExecutor)WB;
+            string jsonResult = javaScript.ExecuteScript("return $('#MadaktoUnitTestMessage').text()").ToString();
             if (string.IsNullOrEmpty(jsonResult))
             {
                 test.Log(Status.Fail, "Test UnComplete : " + "عملیات تست نافص شده فیلد ها پر نشده است");
@@ -453,8 +446,8 @@ namespace Sele_Test
         {
 
             WB.Navigate().GoToUrl(url);
-            Thread.Sleep(2000);            
-            var BtncalCulators = WB.FindElements(By.CssSelector("td i.fa-calculator"));            
+            Thread.Sleep(2000);
+            var BtncalCulators = WB.FindElements(By.CssSelector("td i.fa-calculator"));
             if (BtncalCulators?.Count > 0)
             {
                 foreach (var BtncalCulator in BtncalCulators)
@@ -506,12 +499,11 @@ namespace Sele_Test
                         else
                             _definition_FinancialYear_CalculateYearFunctional();
                     }
-
                 }
             }
             else
             {
-                test.Log(Status.Fatal,"table hav not any item");
+                test.Log(Status.Fatal, "table hav not any item");
                 return;
             }
         }
