@@ -48,7 +48,7 @@ namespace Sele_Test
         {
 
             extent = new ExtentReports();
-            var htmlreporter = new ExtentHtmlReporter(@"D:\Report_Device\" + DateTime.Now.ToString("_MMddyyyy_hhmmtt") + "\\Rep.html", AventStack.ExtentReports.Reporter.Configuration.ViewStyle.SPA);
+            var htmlreporter = new ExtentHtmlReporter(@"D:\Report_Device\" + DateTime.Now.ToString("_MM_dd_yyyy_hh_mm_tt") + "\\Rep.html", AventStack.ExtentReports.Reporter.Configuration.ViewStyle.SPA);
             extent.AttachReporter(htmlreporter);
 
         }
