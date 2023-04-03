@@ -225,7 +225,6 @@ namespace Sele_Test
 
 
 
-
             //Random
             Random rd = new Random();
             string rand_num = Convert.ToString(rd.Next(1, 255));
@@ -299,7 +298,7 @@ namespace Sele_Test
             IWebElement FY_Title = WB.FindElement(By.Id("txtYearTitle"));
             IWebElement FY_FromDate = WB.FindElement(By.Id("txtYearFromDate"));
             IWebElement FY_ToDate = WB.FindElement(By.Id("txtYearToDate"));
-            // IWebElement FY_ChYear = WB.FindElement(By.Id("chkYearStatus"));
+            //IWebElement FY_ChYear = WB.FindElement(By.Id("chkYearStatus"));
             //IWebElement FY_Sbut = WB.FindElements(By.ClassName("btn-success"));
 
             FY_code.SendKeys("1403");
@@ -307,7 +306,7 @@ namespace Sele_Test
             FY_FromDate.SendKeys("1403/01/01");
             FY_ToDate.SendKeys("1403/12/29");
 
-            // Console.WriteLine(FY_Sbut);
+            //Console.WriteLine(FY_Sbut);
 
         }
 
