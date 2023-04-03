@@ -186,9 +186,6 @@ namespace Sele_Test
             Login();
             for (int i = 0; i < 1; i++)
             {
-                Thread.Sleep(4000);
-                test = extent.CreateTest("Definition_FinancialYear_CalculateYearFunctional").Info("Definition_FinancialYear_CalculateYearFunctional");
-                WB.Manage().Window.Maximize();
                 Definition_FinancialYear_CalculateYearFunctional();
             }
         }
@@ -255,7 +252,7 @@ namespace Sele_Test
                     return;
                 }
                 var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<TestResult> tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
+                List<ResponseDTO> tmp = JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult);
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -270,7 +267,6 @@ namespace Sele_Test
             }
 
             catch (Exception e)
-
             {
                 test.Log(Status.Fail, "Test Fail : " + "عملیات تست نافص شده");
                 throw;
@@ -363,7 +359,7 @@ namespace Sele_Test
                     return;
                 }
                 var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<TestResult>? tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
+                List<ResponseDTO>? tmp = JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult);
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -413,7 +409,7 @@ namespace Sele_Test
                     return;
                 }
                 var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-                List<TestResult>? tmp = JsonConvert.DeserializeObject<List<TestResult>>(jsonResult);
+                List<ResponseDTO>? tmp = JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult);
                 foreach (var item in tmp)
                 {
                     if (tmp != null && item.MessageType != "Success")
@@ -435,72 +431,90 @@ namespace Sele_Test
             //btnSaveDevice.Click();
             test.Extent.Flush();
         }
-        List<TestResult> getOperationStatus()
+        List<ResponseDTO> getOperationStatus()
         {
             IWebElement operationStatus = WB.FindElement(By.Id("MadaktoUnitTestMessage"));
             string jsonResult = operationStatus.Text;
             if (string.IsNullOrEmpty(jsonResult))
             {
                 test.Log(Status.Fail, "Test UnComplete : " + "عملیات تست نافص شده فیلد ها پر نشده است");
-                return new List<TestResult>();
+                return new List<ResponseDTO>();
             }
             var tmp2 = JsonConvert.DeserializeObject(jsonResult);
-            return JsonConvert.DeserializeObject<List<TestResult>>(jsonResult) ?? new List<TestResult>();
+            return JsonConvert.DeserializeObject<List<ResponseDTO>>(jsonResult) ?? new List<ResponseDTO>();
         }
-        public void Definition_FinancialYear_CalculateYearFunctional()
+        void Definition_FinancialYear_CalculateYearFunctional()
+        {
+            Thread.Sleep(4000);
+            test = extent.CreateTest("Definition_FinancialYear_CalculateYearFunctional").Info("Definition_FinancialYear_CalculateYearFunctional");
+            WB.Manage().Window.Maximize();
+            _definition_FinancialYear_CalculateYearFunctional();
+        }
+        public void _definition_FinancialYear_CalculateYearFunctional()
         {
 
             WB.Navigate().GoToUrl(url);
-            Thread.Sleep(2000);
-            IWebElement? BtnNew = null;
-            BtnNew = WB.FindElements(By.CssSelector("td i.fa-calculator")).FirstOrDefault();
-            BtnNew.Click();
-            Thread.Sleep(1000);
-            IWebElement BtnSelectePersonnelModal = WB.FindElement(By.CssSelector(".floating-image2"));
-            IJavaScriptExecutor javaScript = (IJavaScriptExecutor)WB;
-            javaScript.ExecuteScript("javascript:localEmployeeSrlOrEmployeeId=0; ShowEmployeeListAndSelectPersonelUseFiltering('txtFromEmployeeId');");
-            Thread.Sleep(2000);
-            SearchAndSelect_Personnel();
-            Thread.Sleep(2000);
-
-            while (true)
+            Thread.Sleep(2000);            
+            var BtncalCulators = WB.FindElements(By.CssSelector("td i.fa-calculator"));            
+            if (BtncalCulators?.Count > 0)
             {
-                javaScript.ExecuteScript("javascript:localEmployeeSrlOrEmployeeId=0; ShowEmployeeListAndSelectPersonelUseFiltering('txtToEmployeeId');");
-                Thread.Sleep(2000);
-                SearchAndSelect_Personnel();
-                Thread.Sleep(2000);
-                IWebElement saveFinancialYearClose = WB.FindElement(By.Id("saveFinancialYearClose"));
-                saveFinancialYearClose.Click();
-                Thread.Sleep(2000);
-                var operationsStatus = getOperationStatus();
-                javaScript.ExecuteScript("$('#MadaktoUnitTestMessage').html('')");
-                var btnSave = WB.FindElement(By.Id("saveFinancialYearClose"));
-                if (operationsStatus.Count > 0)
+                foreach (var BtncalCulator in BtncalCulators)
                 {
-                    if (operationsStatus[operationsStatus.Count - 1].MessageType == "Error" && operationsStatus[operationsStatus.Count - 1].Message.Contains("تا پرسنل"))
+
+                    BtncalCulator.Click();
+                    Thread.Sleep(1000);
+                    IWebElement BtnSelectePersonnelModal = WB.FindElement(By.CssSelector(".floating-image2"));
+                    IJavaScriptExecutor javaScript = (IJavaScriptExecutor)WB;
+                    javaScript.ExecuteScript("javascript:localEmployeeSrlOrEmployeeId=0; ShowEmployeeListAndSelectPersonelUseFiltering('txtFromEmployeeId');");
+                    Thread.Sleep(2000);
+                    SearchAndSelect_Personnel();
+                    Thread.Sleep(2000);
+
+                    while (true)
                     {
-                        continue;
-                    }
-                    else
-                        break;
-                }
-                else if (btnSave.Text != "بله")
-                {
-                    WebDriverWait w = new WebDriverWait(WB, TimeSpan.FromMinutes(5));
-
-                    w.Until<int>((driver) =>
-                    {                        
-                        if (btnSave.Text == "بله")
+                        javaScript.ExecuteScript("javascript:localEmployeeSrlOrEmployeeId=0; ShowEmployeeListAndSelectPersonelUseFiltering('txtToEmployeeId');");
+                        Thread.Sleep(2000);
+                        SearchAndSelect_Personnel();
+                        Thread.Sleep(2000);
+                        IWebElement saveFinancialYearClose = WB.FindElement(By.Id("saveFinancialYearClose"));
+                        saveFinancialYearClose.Click();
+                        Thread.Sleep(2000);
+                        var operationsStatus = getOperationStatus();
+                        javaScript.ExecuteScript("$('#MadaktoUnitTestMessage').html('')");
+                        var btnSave = WB.FindElement(By.Id("saveFinancialYearClose"));
+                        if (operationsStatus.Count > 0)
                         {
-                            return 0;
+                            if (operationsStatus[operationsStatus.Count - 1].MessageType == "Error" && operationsStatus[operationsStatus.Count - 1].Message.Contains("تا پرسنل"))
+                            {
+                                continue;
+                            }
+                            else
+                                break;
                         }
-                        return 1;
-                    });
-                }
-                else
-                    Definition_FinancialYear_CalculateYearFunctional();
-            }
+                        else if (btnSave.Text != "بله")
+                        {
+                            WebDriverWait w = new WebDriverWait(WB, TimeSpan.FromMinutes(5));
 
+                            w.Until<int>((driver) =>
+                            {
+                                if (btnSave.Text == "بله")
+                                {
+                                    return 0;
+                                }
+                                return 1;
+                            });
+                        }
+                        else
+                            _definition_FinancialYear_CalculateYearFunctional();
+                    }
+
+                }
+            }
+            else
+            {
+                test.Log(Status.Fatal,"table hav not any item");
+                return;
+            }
         }
         string SearchAndSelect_Personnel()
         {
@@ -538,7 +552,7 @@ namespace Sele_Test
             Console.WriteLine("Closing Browser ...");
         }
     }
-    public class TestResult : AventStack.ExtentReports.Gherkin.Model.IGherkinFormatterModel
+    public class ResponseDTO : AventStack.ExtentReports.Gherkin.Model.IGherkinFormatterModel
     {
         public string MessageType { get; set; }
         public string Message { get; set; }
